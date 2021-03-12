@@ -22,11 +22,10 @@ model = dict(
         start_level=1,
         add_extra_convs='on_input',
         num_outs=5,
-        upsample_cfg=dict(mode='bilinear')
-    ),
+        upsample_cfg=dict(mode='bilinear')),
     bbox_head=dict(
         type='YOLACTHead',
-        num_classes=80,
+        num_classes=1,
         in_channels=256,
         feat_channels=256,
         anchor_generator=dict(
@@ -55,12 +54,12 @@ model = dict(
         type='YOLACTProtonet',
         in_channels=256,
         num_protos=32,
-        num_classes=80,
+        num_classes=1,
         max_masks_to_train=100,
         loss_mask_weight=6.125),
     segm_head=dict(
         type='YOLACTSegmHead',
-        num_classes=80,
+        num_classes=1,
         in_channels=256,
         loss_segm=dict(
             type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0)),
@@ -87,7 +86,8 @@ model = dict(
         max_per_img=100))
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = 'data/coco/'
+data_root = 'data/onaho/'
+classes=('onaho',)
 img_norm_cfg = dict(
     mean=[123.68, 116.78, 103.94], std=[58.40, 57.12, 57.38], to_rgb=True)
 train_pipeline = [
@@ -129,23 +129,30 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=8,
-    workers_per_gpu=4,
+    samples_per_gpu=2,
+    workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/instances_train2017.json',
-        img_prefix=data_root + 'train2017/',
-        pipeline=train_pipeline),
+        classes=classes,
+        ann_file=data_root + 'annotations.json',
+        img_prefix=data_root + 'JPEGImages/',
+        pipeline=train_pipeline
+        ),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/instances_val2017.json',
-        img_prefix=data_root + 'val2017/',
-        pipeline=test_pipeline),
+        classes=classes,
+        ann_file=data_root + 'annotations_val.json',
+        img_prefix=data_root + 'JPEGImages/',
+        pipeline=test_pipeline
+        ),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/instances_val2017.json',
-        img_prefix=data_root + 'val2017/',
-        pipeline=test_pipeline))
+        classes=classes,
+        ann_file=data_root + 'annotations_val.json',
+        img_prefix=data_root + 'JPEGImages/',
+        pipeline=test_pipeline
+        ))
+
 # optimizer
 optimizer = dict(type='SGD', lr=1e-3, momentum=0.9, weight_decay=5e-4)
 optimizer_config = dict()
