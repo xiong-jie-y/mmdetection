@@ -188,7 +188,7 @@ class FPN(nn.Module):
             else:
                 prev_shape = laterals[i - 1].shape[2:]
                 laterals[i - 1] += F.interpolate(
-                    laterals[i], size=prev_shape, **self.upsample_cfg)
+                    laterals[i], size=prev_shape, **self.upsample_cfg, align_corners=False)
 
         # build outputs
         # part 1: from original levels
