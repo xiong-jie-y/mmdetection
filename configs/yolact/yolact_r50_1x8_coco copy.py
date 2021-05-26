@@ -2,7 +2,7 @@ _base_ = '../_base_/default_runtime.py'
 
 # model settings
 img_size = 500
-num_classes = 6
+num_classes = 1
 model = dict(
     type='YOLACT',
     pretrained='torchvision://resnet50',
@@ -88,8 +88,8 @@ model = dict(
 # dataset settings
 dataset_type = 'CocoDataset'
 data_root = 'data/coco/'
-classes=('alchol sheet', 'ipad', 'notebook', 'usb memory', 'hand', 'scent')
-# classes=('hand', )
+# classes=('alchol sheet', 'ipad', 'notebook', 'usb memory', 'hand')
+classes=('hand', )
 img_norm_cfg = dict(
     mean=[123.68, 116.78, 103.94], std=[58.40, 57.12, 57.38], to_rgb=True)
 train_pipeline = [
